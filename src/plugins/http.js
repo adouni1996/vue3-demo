@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 const serve = axios.create({
-  baseURL: 'https://some-domain.com/api/',
+  baseURL: '/api',
   timeout: 1000,
   headers: { 'X-Custom-Header': 'foobar' }
 })

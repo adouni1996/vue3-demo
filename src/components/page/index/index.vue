@@ -5,7 +5,12 @@
 </template>
 
 <script>
+import { getUserInfo } from '@/api/getData'
 export default {
+  async mounted() {
+    const res = await getUserInfo()
+    console.log(res)
+  }
 
 }
 </script>
