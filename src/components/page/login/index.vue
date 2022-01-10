@@ -7,22 +7,34 @@
       <div class="remark">
         This is a secure system and you willneed to provide your login details to access the site
       </div>
-      <el-form :model="pageData">
-        <template v-for="(item,index) in formList" :key="index">
+      <el-form
+        ref="ruleFormRef"
+        :model="pageData"
+        :rules="rules"
+        :form-size="formSize"
+      >
+        <el-form-item v-for="(item,index) in formList" :key="index" :prop="item.key">
           <el-input v-model="pageData[item.key]" size="large" :placeholder="item.placeholder" />
-        </template>
-        <el-button type="danger" size="large">
-          Danger
-        </el-button>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="danger" size="large" @click="loginClick">
+            Danger
+          </el-button>
+        </el-form-item>
       </el-form>
     </div>
   </div>
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { login } from '@/api/getData'
+import { reactive, ref } from 'vue'
+import { ElMessage } from 'element-plus'
+import { submitForm } from '@/utils/form.js'
 export default {
   setup() {
+    const ruleFormRef = ref()
+    const formSize = ref('')
     const formList = [
       { key: 'username', type: 'text', placeholder: 'username' },
       { key: 'password', type: 'text', placeholder: 'password' }
@@ -33,9 +45,34 @@ export default {
       password: ''
     })
 
+    const rules = reactive({
+      username: [
+        { required: true, message: 'Please input Activity name', trigger: 'blur' }
+      ],
+      password: [
+        { required: true, message: 'Please input Activity name', trigger: 'blur' }
+      ]
+    })
+
+    const loginClick = async() => {
+      submitForm(ruleFormRef)
+      const res = await login(pageData)
+      if (res?.data?.status === '1001') {
+        ElMessage({
+          message: `${res.data.data.username}登录成功`,
+          type: 'success'
+        })
+      }
+    }
+
     return {
       formList,
-      pageData
+      pageData,
+      loginClick,
+      rules,
+      ruleFormRef,
+      formSize,
+      submitForm
     }
   }
 }
@@ -65,9 +102,6 @@ export default {
     }
     .el-form{
       margin-top:  40px;
-      .el-input{
-        margin-bottom: 20px;
-      }
       .el-button{
         margin-top: 40px;
         width: 100%;
