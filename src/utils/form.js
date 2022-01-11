@@ -1,13 +1,7 @@
-export const submitForm = (formEl) => {
+export const submitForm = async(formEl) => {
   if (!formEl) return
-  formEl.validate((valid) => {
-    if (valid) {
-      console.log('submit!')
-    } else {
-      console.log('error submit!')
-      return false
-    }
-  })
+  const validate = await formEl.validate()
+  return validate
 }
 
 export const resetForm = (formEl) => {

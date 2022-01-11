@@ -17,7 +17,7 @@
           <el-input v-model="pageData[item.key]" size="large" :placeholder="item.placeholder" />
         </el-form-item>
         <el-form-item>
-          <el-button type="danger" size="large" @click="loginClick">
+          <el-button type="danger" size="large" @click="loginClick(ruleFormRef)">
             Danger
           </el-button>
         </el-form-item>
@@ -30,7 +30,6 @@
 import { login } from '@/api/getData'
 import { reactive, ref } from 'vue'
 import { ElMessage } from 'element-plus'
-import { submitForm } from '@/utils/form.js'
 export default {
   setup() {
     const ruleFormRef = ref()
@@ -54,25 +53,28 @@ export default {
       ]
     })
 
-    const loginClick = async() => {
-      submitForm(ruleFormRef)
-      const res = await login(pageData)
-      if (res?.data?.status === '1001') {
-        ElMessage({
-          message: `${res.data.data.username}登录成功`,
-          type: 'success'
-        })
-      }
+    const loginClick = (ruleFormRef) => {
+      ruleFormRef.validate(async(validate) => {
+        if (!validate) {
+          return
+        }
+        const res = await login(pageData)
+        if (res?.data?.status === '1001') {
+          ElMessage({
+            message: `${res.data.data.username}登录成功`,
+            type: 'success'
+          })
+        }
+      })
     }
 
     return {
       formList,
       pageData,
-      loginClick,
       rules,
       ruleFormRef,
       formSize,
-      submitForm
+      loginClick
     }
   }
 }
