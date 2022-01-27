@@ -59,6 +59,7 @@ export default {
           return
         }
         const res = await login(pageData)
+        console.log(res)
         if (res?.data?.status === '1001') {
           ElMessage({
             message: `${res.data.data.username}登录成功`,

@@ -3,6 +3,10 @@ import Mock from 'mockjs'
 import qs from 'qs'
 import { successRes } from './templateRes'
 // 获取 mock.Random 对象
+
+Mock.setup({
+  timeout: 1000
+})
 const Random = Mock.Random
 // 使用mockjs模拟数据
 Mock.mock('/api/userInfo', (req, res) => { // 当post或get请求到/api/data路由时Mock会拦截请求并返回上面的数据
