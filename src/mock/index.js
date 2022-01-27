@@ -1,6 +1,7 @@
 // 引入mockjs
-const Mock = require('mockjs')
+import Mock from 'mockjs'
 import qs from 'qs'
+import { successRes } from './templateRes'
 // 获取 mock.Random 对象
 const Random = Mock.Random
 // 使用mockjs模拟数据
@@ -21,12 +22,14 @@ Mock.mock('/api/userInfo', (req, res) => { // 当post或get请求到/api/data路
 })
 
 Mock.mock('/api/login', (req, res) => {
+  return successRes({
+    token: 'aaa',
+    username: `${qs.parse(req.body).username}`
+  })
+})
+
+Mock.mock('/api/getRouter', (req, res) => {
   return {
-    data: {
-      token: 'aaa',
-      username: `${qs.parse(req.body).username}`
-    },
-    msg: 'SUCCESS',
-    status: '1001'
+    data: []
   }
 })
